@@ -1,12 +1,12 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI promtText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     public void UpdateText(string promtMessage)

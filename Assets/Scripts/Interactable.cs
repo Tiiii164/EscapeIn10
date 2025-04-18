@@ -6,6 +6,11 @@ public abstract class Interactable : MonoBehaviour
     public string promtMessage;
     public void BaseInteract()
     {
+        if (useEvents)
+        {
+
+            GetComponent<InteractionEvent>().OnInteract.Invoke();
+        }
         Interact();
     }
     public virtual string OnLook()

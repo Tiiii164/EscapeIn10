@@ -1,6 +1,4 @@
-﻿using StarterAssets;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class PlayerInteract : MonoBehaviour
     {
         playerUI = GetComponent<PlayerUI>();
         inputManager = GetComponent<InputManager>();
-        
+
     }
 
     // Update is called once per frame
@@ -25,7 +23,7 @@ public class PlayerInteract : MonoBehaviour
         Ray ray = new Ray(mainCam.transform.position, mainCam.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * rayDistance);
         RaycastHit hitInfo;
-        if(Physics.Raycast(ray, out hitInfo, rayDistance, mask))
+        if (Physics.Raycast(ray, out hitInfo, rayDistance, mask))
         {
             if (hitInfo.collider.GetComponent<Interactable>() != null)
             {

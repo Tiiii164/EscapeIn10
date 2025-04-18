@@ -3,11 +3,11 @@ using UnityEngine;
 public class KeyPad : Interactable
 {
     [SerializeField] private GameObject door;
-    private bool doorOpen ;
-    
-    
+    private bool doorOpen;
 
-   
+
+
+
     protected override void Interact()
     {
         doorOpen = !doorOpen;
