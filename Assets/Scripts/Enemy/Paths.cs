@@ -1,20 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+
 public class Paths : MonoBehaviour
 {
-
     public List<Transform> waypoints;
+
     [SerializeField]
     private bool alwaysDrawPath;
+
     [SerializeField]
     private bool drawAsLoop;
+
     [SerializeField]
     private bool drawNumbers;
+
     public Color debugColour = Color.white;
 
 #if UNITY_EDITOR
+
     public void OnDrawGizmos()
     {
         if (alwaysDrawPath)
@@ -22,6 +26,7 @@ public class Paths : MonoBehaviour
             DrawPath();
         }
     }
+
     public void DrawPath()
     {
         for (int i = 0; i < waypoints.Count; i++)
@@ -31,7 +36,7 @@ public class Paths : MonoBehaviour
             labelStyle.normal.textColor = debugColour;
             if (drawNumbers)
                 Handles.Label(waypoints[i].position, i.ToString(), labelStyle);
-            //Draw Lines Between Points.
+           
             if (i >= 1)
             {
                 Gizmos.color = debugColour;
@@ -39,10 +44,10 @@ public class Paths : MonoBehaviour
 
                 if (drawAsLoop)
                     Gizmos.DrawLine(waypoints[waypoints.Count - 1].position, waypoints[0].position);
-
             }
         }
     }
+
     public void OnDrawGizmosSelected()
     {
         if (alwaysDrawPath)
@@ -50,5 +55,6 @@ public class Paths : MonoBehaviour
         else
             DrawPath();
     }
+
 #endif
 }

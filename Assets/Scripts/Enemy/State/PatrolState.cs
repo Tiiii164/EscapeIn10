@@ -4,6 +4,7 @@ public class PatrolState : BaseState
 {
     public int waypointIndex;
     public float waitTimer;
+
     public override void Enter()
     {
     }
@@ -15,7 +16,12 @@ public class PatrolState : BaseState
     public override void Perform()
     {
         PatrolCycle();
+        if (enemy.CanSeePlayer())
+        {
+            stateMachine.ChangeState(new AttackState());
+        }
     }
+
     public void PatrolCycle()
     {
         if (enemy.Agent.remainingDistance < 0.2)
@@ -26,7 +32,6 @@ public class PatrolState : BaseState
                 if (waypointIndex < enemy.path.waypoints.Count - 1)
                 {
                     waypointIndex++;
-
                 }
                 else
                 {
@@ -35,8 +40,6 @@ public class PatrolState : BaseState
                 enemy.Agent.SetDestination(enemy.path.waypoints[waypointIndex].position);
                 waitTimer = 0;
             }
-            
         }
     }
-    
 }
