@@ -202,5 +202,8 @@ public class GunSO : ScriptableObject
         
         return trail;
     }
-
+    //public void StartReloading()
+    //{
+    //    AudioConfig.PlayReloadClip(ShootingAudioSource);
+    //}
 }

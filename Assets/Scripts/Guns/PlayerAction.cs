@@ -19,6 +19,8 @@ public class PlayerAction : MonoBehaviour
         {
             //GunSelector.ActiveGun.StartReloading();
             IsReloading = true;
+            
+            Invoke(nameof(EndReload), ReloadSpeed);
             //PlayerAnimator.SetTrigger("Reload");
             //InverseKinematics.HandIKAmount = 0.25f;
             //InverseKinematics.ElbowIKAmount = 0.25f;

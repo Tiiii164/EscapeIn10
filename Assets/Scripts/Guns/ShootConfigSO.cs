@@ -1,5 +1,5 @@
 using System.Linq;
-using UnityEditor.PackageManager.ValidationSuite;
+//using UnityEditor.PackageManager.ValidationSuite;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ShootConfigSO", menuName = "Scriptable Objects/Guns/ShootConfigSO", order = 2)]
