@@ -7,6 +7,10 @@ public class PatrolState : BaseState
 
     public override void Enter()
     {
+        if (enemy.path.waypoints.Count == 0)
+        {
+            enemy.animator.SetTrigger("Patrol");
+        }
     }
 
     public override void Exit()
@@ -15,6 +19,7 @@ public class PatrolState : BaseState
 
     public override void Perform()
     {
+        Debug.Log("Performing");
         PatrolCycle();
         if (enemy.CanSeePlayer())
         {
@@ -27,7 +32,7 @@ public class PatrolState : BaseState
         if (enemy.Agent.remainingDistance < 0.2)
         {
             waitTimer += Time.deltaTime;
-            if (waitTimer > 3)
+            if (waitTimer > 1)
             {
                 if (waypointIndex < enemy.path.waypoints.Count - 1)
                 {

@@ -5,15 +5,17 @@ public class Enemy : MonoBehaviour
 {
     private StateMachine stateMachine;
     private NavMeshAgent agent;
-
+    [Range(0f, 10f)]
+    public float bulletSpread = 3f;
     public NavMeshAgent Agent { get => agent; }
     public GameObject Player { get => player; }
     [SerializeField] private string currentState;
     public Paths path;
-    private GameObject player;
+    [SerializeField] private GameObject player;
     public float sightDistance = 20f;
     public float fieldOfView = 85f;
     public float eyeHeight;
+    public Animator animator;
     [Header("Weapon Values")]
     public Transform gunBarrel;
     [Range(0.1f, 10)]
@@ -23,7 +25,8 @@ public class Enemy : MonoBehaviour
         stateMachine = GetComponent<StateMachine>();
         agent = GetComponent<NavMeshAgent>();
         stateMachine.Initialize();
-        player = GameObject.FindGameObjectWithTag("Player");
+        //player = GameObject.FindGameObjectWithTag("Player");
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -37,6 +40,7 @@ public class Enemy : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, player.transform.position) < sightDistance)
             {
+                
                 Vector3 targetDirection = player.transform.position - transform.position - (Vector3.up * eyeHeight);
                 float angleToPlayer = Vector3.Angle(targetDirection, transform.forward);
                 if(angleToPlayer >= - fieldOfView && angleToPlayer <= fieldOfView)
@@ -55,6 +59,8 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+        Debug.Log("ko thấy player");
+
         return false;
     }
 }

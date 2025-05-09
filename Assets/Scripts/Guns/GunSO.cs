@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 //using UnityEngine.Rendering;
@@ -18,17 +18,17 @@ public class GunSO : ScriptableObject
     public ShootConfigSO ShootConfig;
     public TrailConfigSO TrailConfig;
     public AmmoConfigSO AmmoConfig;
-
+    //public AudioConfigSO AudioConfig;
 
     private MonoBehaviour ActiveMonoBehaviour;
     private GameObject Model;
-
+    private AudioSource ShootingAudioSource;
 
     private float LastShootTime;
     private float InitialClickTime;
     private float StopShootingTime;
     private bool LastFrameWantedToShoot;
-
+    private EnemyHealth EnemyHealth;
 
     private ParticleSystem ShootSystem;
     private ObjectPool<TrailRenderer> TrailPool;
@@ -49,32 +49,42 @@ public class GunSO : ScriptableObject
         Model.transform.localRotation = Quaternion.Euler(SpawnRotation);
 
         ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
+        ShootingAudioSource = Model.GetComponent<AudioSource>();
     }
 
-    public void Shoot()
+    public void TryToShoot()
     {
-        if(Time.time - LastShootTime - ShootConfig.FireRate >Time.deltaTime)
+        if (Time.time - LastShootTime - ShootConfig.FireRate > Time.deltaTime)
         {
             float lastDuration = Mathf.Clamp(0, (StopShootingTime - InitialClickTime), ShootConfig.MaxSpreadTime);
 
             float lerpTime = (ShootConfig.RecoilRecoverySpeed - (Time.time - StopShootingTime))
                 / ShootConfig.RecoilRecoverySpeed;
 
-            InitialClickTime = Time.time - Mathf.Lerp(0,lastDuration,Mathf.Clamp01(lerpTime));
+            InitialClickTime = Time.time - Mathf.Lerp(0, lastDuration, Mathf.Clamp01(lerpTime));
         }
-        if (Time.time > ShootConfig.FireRate+ LastShootTime)
+        if (Time.time > ShootConfig.FireRate + LastShootTime)
         {
-            LastShootTime = Time.time;
-            ShootSystem.Play();
 
+            LastShootTime = Time.time;
+            if (AmmoConfig.CurrentClipAmmo == 0)
+            {
+                //AudioConfig.PlayOutOfAmmoClip(ShootingAudioSource);
+                return;
+            }
+            ShootSystem.Play();
+            //AudioConfig.PlayShootingClip(ShootingAudioSource, AmmoConfig.CurrentClipAmmo == 1);
 
             Vector3 spreadAmount = ShootConfig.GetSpread(Time.time - InitialClickTime);
-            Model.transform.forward += Model.transform.TransformDirection(spreadAmount);
 
-            Vector3 shootDirection = Model.transform.forward ;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 shootDirection = ray.direction + spreadAmount;
+            // Model.transform.forward += Model.transform.TransformDirection(spreadAmount);
+
 
             AmmoConfig.CurrentClipAmmo--;
-
+            Vector3 targetPoint;
             if (Physics.Raycast(
                     ShootSystem.transform.position,
                     shootDirection,
@@ -84,6 +94,7 @@ public class GunSO : ScriptableObject
 
                 ))
             {
+                targetPoint = hit.point;
                 ActiveMonoBehaviour.StartCoroutine(
                     PlayTrail(
                             ShootSystem.transform.position,
@@ -94,6 +105,7 @@ public class GunSO : ScriptableObject
             }
             else
             {
+                targetPoint = ShootSystem.transform.position + (shootDirection * TrailConfig.MissDistance);
                 ActiveMonoBehaviour.StartCoroutine(
                     PlayTrail(
                             ShootSystem.transform.position,
@@ -102,6 +114,8 @@ public class GunSO : ScriptableObject
                         )
                     );
             }
+            Vector3 directionToTarget = targetPoint - Model.transform.position;
+            Model.transform.forward = directionToTarget.normalized;
         }
     }
 
@@ -115,23 +129,26 @@ public class GunSO : ScriptableObject
         AmmoConfig.Reload();
     }
 
+    public void StartReloading()
+    {
+        //AudioConfig.PlayReloadClip(ShootingAudioSource);
+    }
     public void Tick(bool WantsToShoot)
     {
         Model.transform.localRotation = Quaternion.Lerp(
                 Model.transform.localRotation,
                 Quaternion.Euler(SpawnRotation),
-                Time.deltaTime *ShootConfig.RecoilRecoverySpeed
+                Time.deltaTime * ShootConfig.RecoilRecoverySpeed
             );
 
         if (WantsToShoot)
         {
             LastFrameWantedToShoot = true;
-            if(AmmoConfig.CurrentClipAmmo > 0)
-            {
-                Shoot();
 
-            }
-        } 
+            TryToShoot();
+
+
+        }
         else if (!WantsToShoot)
         {
             StopShootingTime = Time.time;
@@ -159,7 +176,7 @@ public class GunSO : ScriptableObject
             );
             remainingDistance -= TrailConfig.SimulationSpeed * Time.deltaTime;
             yield return null;
-            
+
         }
         instance.transform.position = EndPoint;
 
@@ -172,10 +189,12 @@ public class GunSO : ScriptableObject
             //    ImpactType,
             //    0
             //    );
-
+            Debug.Log("Bắn trúng collider rồi");
             if (Hit.collider.TryGetComponent(out IDamageable damageable))
             {
+                Debug.Log("Bắn trúng Idamageable rồi");
                 damageable.TakeDamage(DamageConfig.GetDamage(distance));
+
             }
         }
 
@@ -199,11 +218,8 @@ public class GunSO : ScriptableObject
 
         trail.emitting = false;
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        
+
         return trail;
     }
-    //public void StartReloading()
-    //{
-    //    AudioConfig.PlayReloadClip(ShootingAudioSource);
-    //}
+
 }

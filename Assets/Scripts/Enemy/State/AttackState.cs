@@ -2,15 +2,18 @@
 
 public class AttackState : BaseState
 {
-    private float moveTimer;
+    [SerializeField] private float moveTimer;
     private float losePlayerTimer;
     private float shotTimer;
     public override void Enter()
     {
+        Debug.Log("Vào attack rồi");
+        enemy.animator.SetTrigger("Shoot");
     }
 
     public override void Exit()
     {
+
     }
 
     public override void Perform()
@@ -43,12 +46,18 @@ public class AttackState : BaseState
     public void Shoot()
     {
         Transform gunbarrel = enemy.gunBarrel;
-        GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/Bullet") as GameObject,gunbarrel.position, enemy.transform.rotation);
-        Vector3 shootDirection = ((enemy.Player.transform.position + new Vector3(0,1.5f,0)) - gunbarrel.transform.position).normalized;
-        bullet.GetComponent<Rigidbody>().linearVelocity =Quaternion.AngleAxis(Random.Range(-3,3),Vector3.up )* shootDirection * 40;
+        GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/Bullet") as GameObject, gunbarrel.position, enemy.transform.rotation);
+
+        Vector3 shootDirection = ((enemy.Player.transform.position + new Vector3(0, 1.5f, 0)) - gunbarrel.transform.position).normalized;
+
+        // Random độ lệch dựa trên bulletSpread
+        float spreadAngle = Random.Range(-enemy.bulletSpread, enemy.bulletSpread);
+        shootDirection = Quaternion.AngleAxis(spreadAngle, Vector3.up) * shootDirection;
+
+        bullet.GetComponent<Rigidbody>().linearVelocity = shootDirection * 40;
         Debug.Log("Bằng bằng bằng");
 
         shotTimer = 0;
     }
- 
+
 }

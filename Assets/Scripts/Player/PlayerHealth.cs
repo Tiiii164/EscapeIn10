@@ -54,7 +54,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void UpdateHealthUI()
     {
-        Debug.Log(health);
+        //Debug.Log(health);
         healthText.text = health + " / " + maxHealth;
 
         float fillF = frontHealthBar.fillAmount;
