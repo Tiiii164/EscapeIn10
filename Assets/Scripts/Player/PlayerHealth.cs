@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +6,8 @@ public class PlayerHealth : MonoBehaviour
 {
     private float health;
     private float lerpTimer;
+    [Header("Respawn Settings")]
+    public Transform respawnPoint;
 
     [Header("Health Bar")]
     public float maxHealth = 100f;
@@ -34,7 +36,12 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+
         health = Mathf.Clamp(health, 0, maxHealth);
+        if (health == 0)
+        {
+            Respawn();
+        }
         UpdateHealthUI();
         if (overlay.color.a > 0)
         {
@@ -50,6 +57,8 @@ public class PlayerHealth : MonoBehaviour
                 overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
             }
         }
+       
+
     }
 
     public void UpdateHealthUI()
@@ -95,4 +104,20 @@ public class PlayerHealth : MonoBehaviour
         health += healAmount;
         lerpTimer = 0f;
     }
+    private void Respawn()
+    {
+        // Hồi máu đầy
+        health = maxHealth;
+        lerpTimer = 0f;
+
+        // Teleport về điểm respawn
+        if (respawnPoint != null)
+        {
+            transform.position = respawnPoint.position;
+        }
+
+        // Reset overlay
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
+    }
+
 }
