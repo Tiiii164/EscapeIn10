@@ -12,7 +12,8 @@ public class GunSO : ScriptableObject
     public GameObject ModelPrefab;
     public Vector3 SpawnPoint;
     public Vector3 SpawnRotation;
-
+    public AudioClip fireSound;
+    public AudioClip reloadSound;
 
     public DamageConfigSO DamageConfig;
     public ShootConfigSO ShootConfig;
@@ -70,10 +71,12 @@ public class GunSO : ScriptableObject
             if (AmmoConfig.CurrentClipAmmo == 0)
             {
                 //AudioConfig.PlayOutOfAmmoClip(ShootingAudioSource);
+                //SoundFXManager.Instance.PlaySoundFXClip(reloadSound, ModelPrefab.transform, 0.1f);
+
                 return;
             }
             ShootSystem.Play();
-            //AudioConfig.PlayShootingClip(ShootingAudioSource, AmmoConfig.CurrentClipAmmo == 1);
+            SoundFXManager.Instance.PlaySoundFXClip(fireSound, ModelPrefab.transform, 0.1f);
 
             Vector3 spreadAmount = ShootConfig.GetSpread(Time.time - InitialClickTime);
 
@@ -126,12 +129,16 @@ public class GunSO : ScriptableObject
 
     public void EndReload()
     {
+        SoundFXManager.Instance.PlaySoundFXClip(reloadSound, ModelPrefab.transform, 0.1f);
+
         AmmoConfig.Reload();
+
     }
 
     public void StartReloading()
     {
         //AudioConfig.PlayReloadClip(ShootingAudioSource);
+        //SoundFXManager.Instance.PlaySoundFXClip(reloadSound, ModelPrefab.transform, 0.1f);
     }
     public void Tick(bool WantsToShoot)
     {

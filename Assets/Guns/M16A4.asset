@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3150eb8521611bc40a9bc9589e0a0432, type: 3}
   m_Name: M16A4
   m_EditorClassIdentifier: 
-  ImpactType: {fileID: 11400000, guid: f967b71e68a15f041987dcfaa92d0fc4, type: 2}
   Type: 1
   Name: M14A6
   ModelPrefab: {fileID: 5412471849917846727, guid: d4b671c7560be1a4188594c585edd535, type: 3}
   SpawnPoint: {x: 0, y: -0.03, z: 0.5}
   SpawnRotation: {x: 0, y: 0, z: 0}
+  fireSound: {fileID: 8300000, guid: 0e5ec5d798406aa4699be8c44dd7599f, type: 3}
+  reloadSound: {fileID: 8300000, guid: 5e7f633dda3117f4f90253f51ee065f0, type: 3}
   DamageConfig: {fileID: 11400000, guid: 613327f7a5abb9f418825617764ea51b, type: 2}
   ShootConfig: {fileID: 11400000, guid: 88a97f0719354f046a281efb9fbf6f04, type: 2}
   TrailConfig: {fileID: 11400000, guid: 9a7c13815167a084a856b8bf47ee1117, type: 2}

@@ -13,7 +13,7 @@ public class SoundFXManager : MonoBehaviour
             Instance = this;
         }
     }
-
+    
     public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume)
     {
         //spawn in gameObject
@@ -35,6 +35,7 @@ public class SoundFXManager : MonoBehaviour
         Destroy(audioSource.gameObject, clipLength);
 
     }
+   
     public void PlayRandomSoundFXClip(AudioClip[] audioClip, Transform spawnTransform, float volume)
     {
         int random = Random.Range(0, audioClip.Length);

@@ -62,6 +62,8 @@ public class PlayerAction : MonoBehaviour
     private void EndReload()
     {
         GunSelector.ActiveGun.EndReload();
+       
+
         //InverseKinematics.HandIKAmount = 1f;
         //InverseKinematics.ElbowIKAmount = 1f;
         IsReloading = false;

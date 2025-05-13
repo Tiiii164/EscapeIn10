@@ -1,26 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class UISoundController : MonoBehaviour
 {
-    public GameObject soundMenu;
-    private bool isOpen = false;
+    public GameObject exitButton;
+    //private bool isOpen = false;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isOpen = !isOpen;
-            soundMenu.SetActive(isOpen);
+            SceneManager.LoadScene("Intro");
         }
     }
     private void Start()
     {
         
     }
-    public void CloseSoundPanel()
-    {
-        soundMenu.SetActive(false);
-    }
+    //public void CloseSoundPanel()
+    //{
+    //    soundMenu.SetActive(false);
+    //}
 }

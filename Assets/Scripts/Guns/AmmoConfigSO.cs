@@ -14,7 +14,7 @@ public class AmmoConfigSO : ScriptableObject
    
     public void Reload()
     {
-        
+
         int maxReloadAmount = Mathf.Min(ClipSize, CurrentAmmo);
         int availableBulletsInCurrentClip = ClipSize - CurrentClipAmmo;
         int reloadAmount = Mathf.Min(maxReloadAmount, availableBulletsInCurrentClip);
